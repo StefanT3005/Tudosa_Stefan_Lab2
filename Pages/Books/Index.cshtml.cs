@@ -12,21 +12,48 @@ namespace Tudosa_Stefan_Lab2.Pages.Books
 {
     public class IndexModel : PageModel
     {
-        private readonly Tudosa_Stefan_Lab2.Data.Tudosa_Stefan_Lab2Context _context;
+        private readonly Tudosa_Stefan_Lab2Context _context;
 
-        public IndexModel(Tudosa_Stefan_Lab2.Data.Tudosa_Stefan_Lab2Context context)
+        public IndexModel(Tudosa_Stefan_Lab2Context context)
         {
             _context = context;
         }
 
-        public IList<Book> Book { get;set; } = default!;
+        public IList<Book> Book { get; set; } = new List<Book>();
 
-        public async Task OnGetAsync()
+        public BookData BookD { get; set; } = new();
+
+        public int BookID { get; set; }
+        public int CategoryID { get; set; }
+
+        public async Task OnGetAsync(int? id, int? categoryID)
         {
             Book = await _context.Book
                 .Include(b => b.Publisher)
+                .Include(b => b.BookCategories).ThenInclude(bc => bc.Category)
                 .Include(b => b.Author)
+                .AsNoTracking()
                 .ToListAsync();
+
+            BookD.Books = Book;
+
+            if (id.HasValue)
+            {
+                BookID = id.Value;
+
+                var book = BookD.Books.FirstOrDefault(i => i.ID == id.Value);
+                if (book != null)
+                {
+                    BookD.Categories = book.BookCategories
+                        .Select(s => s.Category!)
+                        .ToList();
+                }
+            }
+
+            if (categoryID.HasValue)
+            {
+                CategoryID = categoryID.Value;
+            }
         }
     }
 }
