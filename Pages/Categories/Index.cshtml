@@ -1,36 +1,56 @@
-﻿@page
+﻿@page "{id:int?}"
 @model Tudosa_Stefan_Lab2.Pages.Categories.IndexModel
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Categories";
 }
 
-<h1>Index</h1>
+<h1>Categories</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+<p><a asp-page="Create">Create New</a></p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Category[0].CategoryName)
-            </th>
+            <th>Category</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Category) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.CategoryD.Categories!)
+        {
+            var selected = item.ID == Model.CategoryID ? "table-success" : "";
+            <tr class="@selected">
+                <td>@item.CategoryName</td>
+                <td>
+                    <a asp-page="./Index" asp-route-id="@item.ID">Select</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@if (Model.CategoryID.HasValue)
+{
+    <h3>Books in selected category</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model.CategoryD.Books!.OrderBy(b => b.Title))
+            {
+                <tr>
+                    <td>@b.Title</td>
+                    <td>@b.Author?.FullName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
