@@ -3,6 +3,10 @@
     "mssql1": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:Tudosa_Stefan_Lab2Context"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:LibraryIdentifyContextConnection"
     }
   }
 }
