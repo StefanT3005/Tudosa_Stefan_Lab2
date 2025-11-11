@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,6 +12,8 @@ using Tudosa_Stefan_Lab2.Models.ViewModels;
 
 namespace Tudosa_Stefan_Lab2.Pages.Publishers
 {
+    [Authorize(Roles = "Admin")]
+
     public class IndexModel : PageModel
     {
         private readonly Tudosa_Stefan_Lab2.Data.Tudosa_Stefan_Lab2Context _context;

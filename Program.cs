@@ -4,8 +4,21 @@ using Tudosa_Stefan_Lab2.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy =>
+   policy.RequireRole("Admin"));
+});
 
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeFolder("/Books");
+    options.Conventions.AllowAnonymousToPage("/Books/Details");
+    options.Conventions.AllowAnonymousToPage("/Books/Index");
+    options.Conventions.AuthorizeFolder("/Members", "AdminPolicy");
+
+
+});
 
 
 builder.Services.AddDbContext<Tudosa_Stefan_Lab2Context>(options =>
@@ -25,6 +38,7 @@ builder.Services
     {
         options.SignIn.RequireConfirmedAccount = true;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<LibraryIdentityContext>();
 
 var app = builder.Build();

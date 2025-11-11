@@ -1,12 +1,15 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 using Tudosa_Stefan_Lab2.Data;
 using Tudosa_Stefan_Lab2.Models;
 
 namespace Tudosa_Stefan_Lab2.Pages.Categories
 {
+    [Authorize(Roles = "Admin")]
+
     public class IndexModel : PageModel
     {
         private readonly Tudosa_Stefan_Lab2Context _context;
